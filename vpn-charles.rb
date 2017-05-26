@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
 require 'optparse'
-
 options = {}
 
 def log(message, options)
@@ -42,7 +41,7 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
 end
 
 juniperState = `scutil<< EOF
-show State:/Network/Service/net.juniper.ncproxyd.main/IPv4
+show State:/Network/Service/net.juniper.pulse.nc.main/IPv4
 quit
 EOF`
 
@@ -55,23 +54,19 @@ log(serviceKey, options)
 if options[:on]
   #now save it (must be root :-( )
 results = `scutil<< EOF
-lock
 d.init
 get Setup:/Network/Service/#{serviceKey}/Proxies
-set State:/Network/Service/net.juniper.ncproxyd.main/Proxies
-unlock
+set State:/Network/Service/net.pulsesecure.pulse.nc.main/Proxies
 quit
 EOF`
 else
   # disable proxying
 results = `scutil<< EOF
-lock
 d.init
-get State:/Network/Service/net.juniper.ncproxyd.main/Proxies
+get State:/Network/Service/net.pulsesecure.pulse.nc.main/Proxies
 d.add HTTPSEnable 0
 d.add HTTPEnable 0
-set State:/Network/Service/net.juniper.ncproxyd.main/Proxies
-unlock
+set State:/Network/Service/net.pulsesecure.pulse.nc.main/Proxies
 quit
 EOF`
 end
